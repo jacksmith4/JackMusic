@@ -174,4 +174,6 @@
     "invalidTimeOrder": "End time cannot be less than or equal to start time",
     "setStageAnnounceTemplate": "Done! From now on, voice status like the one you're in now will be named according to your template. You should see it update in a few seconds.",
     "createSongRequestChannel": "A song request channel ({0}) has been created! You can start requesting any song by name or URL in that channel, without needing to use the bot prefix."
+    ,"guildStats": "📈 Guild stats for last {0} days:\nTracks played: {1}\nTotal duration: {2}\nTop requesters:\n{3}",
+    "guildStatsNoData": "No stats available for this time range."
 }

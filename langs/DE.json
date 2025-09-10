@@ -173,5 +173,7 @@
     "invalidEndTime": "Ungültige Endzeit! Die Zeit muss innerhalb von `00:00` und `{0}` liegen.",
     "invalidTimeOrder": "Die Endzeit darf nicht kleiner oder gleich dem Startzeit sein.",
     "setStageAnnounceTemplate": "Fertig! Ab sofort wird der Sprachstatus wie der, in dem Du Dich gerade befindest, gemäß Deiner Vorlage benannt. Du solltest in wenigen Sekunden eine Aktualisierung sehen.",
-    "createSongRequestChannel": "Der Song Request Channel ({0}) wurde erstellt! Du kannst jeden Song nach Namen oder URL in diesem Kanal anfordern, ohne den Bot-Präfix verwenden zu müssen."
+    "createSongRequestChannel": "Der Song Request Channel ({0}) wurde erstellt! Du kannst jeden Song nach Namen oder URL in diesem Kanal anfordern, ohne den Bot-Präfix verwenden zu müssen.",
+    "guildStats": "📈 Guild stats for last {0} days:\nTracks played: {1}\nTotal duration: {2}\nTop requesters:\n{3}",
+    "guildStatsNoData": "No stats available for this time range."
 }
