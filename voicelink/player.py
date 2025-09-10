@@ -437,6 +437,8 @@ class Player(VoiceProtocol):
 
             if not track.requester.bot:
                 self._bot.loop.create_task(func.update_user(track.requester.id, {
+                    "$inc": {"track_count": 1, "total_duration": int(track.length or 0)},
+                    "$addToSet": {"requesters": track.requester.id},
                     "$push": {"history": {"$each": [track.track_id], "$slice": -25}}
                 }))
 
