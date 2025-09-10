@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import discord, voicelink, re
+import discord, voicelink, re, psutil
 
 from io import StringIO
 from discord import app_commands
@@ -35,6 +35,7 @@ from function import (
     get_user,
     get_lang,
     truncate_string,
+    format_bytes,
     cooldown_check,
     get_aliases,
     logger
@@ -863,6 +864,24 @@ class Basic(commands.Cog):
         view = HelpView(self.bot, ctx.author)
         embed = view.build_embed(category)
         view.response = await send(ctx, embed, view=view)
+
+    @commands.hybrid_command(name="stats", aliases=get_aliases("stats"))
+    @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
+    async def stats(self, ctx: commands.Context):
+        """Show bot and system statistics."""
+        memory = psutil.virtual_memory()
+        value = await get_lang(ctx.guild.id, "statsTitle", "statsCPU", "statsMemory", "statsGuilds", "statsUsers")
+
+        embed = discord.Embed(color=settings.embed_color, title=value[0])
+        embed.add_field(name=value[1], value=f"{psutil.cpu_percent():.1f}%")
+        embed.add_field(
+            name=value[2],
+            value=f"{memory.percent:.1f}% ({format_bytes(memory.used, True)}/{format_bytes(memory.total, True)})",
+        )
+        embed.add_field(name=value[3], value=str(len(self.bot.guilds)))
+        embed.add_field(name=value[4], value=str(len(self.bot.users)))
+
+        await send(ctx, embed)
 
     @commands.hybrid_command(name="ping", aliases=get_aliases("ping"))
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
