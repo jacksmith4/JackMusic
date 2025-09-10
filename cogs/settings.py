@@ -210,7 +210,7 @@ class Settings(commands.Cog, name="settings"):
     @commands.has_permissions(manage_guild=True)
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
     async def duplicatetrack(self, ctx: commands.Context):
-        "Toggle Vocard to prevent duplicate songs from queuing."
+        "Toggle RhythmoSync to prevent duplicate songs from queuing."
         settings = await get_settings(ctx.guild.id)
         toggle = not settings.get('duplicate_track', False)
         player: voicelink.Player = ctx.guild.voice_client

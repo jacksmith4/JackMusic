@@ -75,14 +75,14 @@ USER_BASE: dict[str, Any] = {
 ALLOWED_MENTIONS = discord.AllowedMentions().none()
 LAST_SESSION_FILE_NAME = "last-session.json"
 
-#-------------- Vocard Classes --------------
+#-------------- RhythmoSync Classes --------------
 class TempCtx():
     def __init__(self, author: discord.Member, channel: discord.VoiceChannel) -> None:
         self.author: discord.Member = author
         self.channel: discord.VoiceChannel = channel
         self.guild: discord.Guild = channel.guild
 
-#-------------- Vocard Functions --------------
+#-------------- RhythmoSync Functions --------------
 def open_json(path: str) -> dict:
     try:
         with open(os.path.join(ROOT_DIR, path), encoding="utf8") as json_file:
