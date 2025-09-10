@@ -4,8 +4,8 @@ from io import BytesIO
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 __version__ = "v2.6.9"
 
-GITHUB_API_URL = "https://api.github.com/repos/ChocoMeow/Vocard/releases/latest"
-VOCARD_URL = "https://github.com/ChocoMeow/Vocard/archive/"
+GITHUB_API_URL = "https://api.github.com/repos/ChocoMeow/RhythmoSync/releases/latest"
+RHYTHMOSYNC_URL = "https://github.com/ChocoMeow/RhythmoSync/archive/"
 IGNORE_FILES = ["settings.json", "logs"]
 
 class bcolors:
@@ -41,8 +41,8 @@ def download_file(version=None):
         BytesIO: the downloaded zip file.
     """
     version = version if version else check_version()
-    print(f"Downloading Vocard version: {version}")
-    response = requests.get(VOCARD_URL + version + ".zip")
+    print(f"Downloading RhythmoSync version: {version}")
+    response = requests.get(RHYTHMOSYNC_URL + version + ".zip")
     if response.status_code == 404:
         print(f"{bcolors.FAIL}Warning: Version not found!{bcolors.ENDC}")
         exit()
@@ -68,10 +68,10 @@ def install(response, version):
         zfile.extractall(ROOT_DIR)
 
         version = version.replace("v", "")
-        source_dir = os.path.join(ROOT_DIR, f"Vocard-{version}")
+        source_dir = os.path.join(ROOT_DIR, f"RhythmoSync-{version}")
         if os.path.exists(source_dir):
             for filename in os.listdir(ROOT_DIR):
-                if filename in IGNORE_FILES + [f"Vocard-{version}"]:
+                if filename in IGNORE_FILES + [f"RhythmoSync-{version}"]:
                     continue
 
                 filename = os.path.join(ROOT_DIR, filename)
@@ -88,11 +88,11 @@ def install(response, version):
 
 def parse_args():
     """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='Update script for Vocard.')
-    parser.add_argument('-c', '--check', action='store_true', help='Check the current version of the Vocard')
-    parser.add_argument('-v', '--version', type=str, help='Install the specified version of the Vocard')
-    parser.add_argument('-l', '--latest', action='store_true', help='Install the latest version of the Vocard from Github')
-    parser.add_argument('-b', '--beta', action='store_true', help='Install the beta version of the Vocard from Github')
+    parser = argparse.ArgumentParser(description='Update script for RhythmoSync.')
+    parser.add_argument('-c', '--check', action='store_true', help='Check the current version of the RhythmoSync')
+    parser.add_argument('-v', '--version', type=str, help='Install the specified version of the RhythmoSync')
+    parser.add_argument('-l', '--latest', action='store_true', help='Install the latest version of the RhythmoSync from Github')
+    parser.add_argument('-b', '--beta', action='store_true', help='Install the beta version of the RhythmoSync from Github')
     return parser.parse_args()
 
 def main():
