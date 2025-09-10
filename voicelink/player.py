@@ -378,6 +378,7 @@ class Player(VoiceProtocol):
 
         if isinstance(event, TrackEndEvent) and event.reason != "replaced":
             self._current = None
+            create_task(func.track_end_stats(self.guild.id, event.track))
         
         if isinstance(event, TrackExceptionEvent) and event.exception["message"] == "This content isn’t available.":
             if self._node.yt_ratelimit:
@@ -387,6 +388,7 @@ class Player(VoiceProtocol):
 
         if isinstance(event, TrackStartEvent):
             self._ending_track = self._current
+            create_task(func.track_start_stats(self.guild.id, self._current))
             if self.crossfade_duration > 0:
                 if self._crossfade_task:
                     self._crossfade_task.cancel()

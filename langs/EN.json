@@ -41,6 +41,8 @@
     "statsMemory": "Memory Usage",
     "statsGuilds": "Servers",
     "statsUsers": "Users",
+    "guildStats": "This server has played {0} tracks with {1} listeners.",
+    "guildStatsNoData": "No statistics are available for this server.",
     "addEffect": "Applied the `{0}` effect.",
     "clearEffect": "The sound effects have been cleared!",
     "filterTagAlreadyInUse": "This sound effect is already in use! Please use /cleareffect <Tag> to remove it.",
