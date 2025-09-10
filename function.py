@@ -22,6 +22,7 @@ SOFTWARE.
 """
 
 import discord, json, os, copy, logging
+from datetime import datetime, timedelta
 
 from discord.ext import commands
 from time import strptime
@@ -58,6 +59,10 @@ SETTINGS_BUFFER: dict[int, dict[str, Any]] = {} #Cache guild language
 USERS_BUFFER: dict[str, dict] = {}
 
 MISSING_TRANSLATOR: dict[str, list[str]] = {}
+
+# History retention settings
+HISTORY_MAX_ENTRIES: int = 100
+HISTORY_RETENTION_DAYS: int = 30
 
 USER_BASE: dict[str, Any] = {
     'playlist': {
@@ -316,14 +321,37 @@ async def get_user(user_id: int, d_type: Optional[str] = None, need_copy: bool =
         if not user:
             user = {"_id": user_id, **USER_BASE}
             await USERS_DB.insert_one(user)
-    
+
         USERS_BUFFER[user_id] = user
-        
+
     if d_type:
         user = user.setdefault(d_type, copy.deepcopy(USER_BASE.get(d_type)))
-            
+        if d_type == "history" and user:
+            pruned = prune_history(user)
+            if len(pruned) != len(user):
+                user[:] = pruned
+                await update_db(USERS_DB, USERS_BUFFER[user_id], {"_id": user_id}, {"$set": {"history": user}})
+
     return copy.deepcopy(user) if need_copy else user
 
 async def update_user(user_id:int, data:dict) -> bool:
     playlist = await get_user(user_id, need_copy=False)
     return await update_db(USERS_DB, playlist, {"_id": user_id}, data)
+
+
+def prune_history(history: list[dict]) -> list[dict]:
+    """Return history entries within the retention policy."""
+    cutoff = datetime.utcnow() - timedelta(days=HISTORY_RETENTION_DAYS)
+    history = [h for h in history if h.get("timestamp", 0) >= cutoff.timestamp()]
+    if len(history) > HISTORY_MAX_ENTRIES:
+        history = history[-HISTORY_MAX_ENTRIES:]
+    return history
+
+
+async def add_history_entry(user_id: int, track_id: str) -> None:
+    """Append a track to a user's history respecting retention limits."""
+    user = await get_user(user_id, "history", need_copy=False)
+    entry = {"track_id": track_id, "timestamp": datetime.utcnow().timestamp()}
+    user.append(entry)
+    user[:] = prune_history(user)
+    await update_db(USERS_DB, USERS_BUFFER[user_id], {"_id": user_id}, {"$set": {"history": user}})

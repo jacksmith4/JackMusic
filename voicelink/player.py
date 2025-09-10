@@ -436,9 +436,7 @@ class Player(VoiceProtocol):
                 return await self.do_next()
 
             if not track.requester.bot:
-                self._bot.loop.create_task(func.update_user(track.requester.id, {
-                    "$push": {"history": {"$each": [track.track_id], "$slice": -25}}
-                }))
+                self._bot.loop.create_task(func.add_history_entry(track.requester.id, track.track_id))
 
         await self.invoke_controller()
         await self.update_voice_status()

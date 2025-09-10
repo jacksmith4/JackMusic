@@ -38,6 +38,8 @@ from function import (
     format_bytes,
     cooldown_check,
     get_aliases,
+    HISTORY_MAX_ENTRIES,
+    HISTORY_RETENTION_DAYS,
     logger
 )
 
@@ -104,7 +106,12 @@ class Basic(commands.Cog):
 
             return [app_commands.Choice(name=truncate_string(f"🎵 {track.author} - {track.title}", 100), value=truncate_string(f"{track.author} - {track.title}", 100)) for track in tracks]
         
-        history = {track["identifier"]: track for track_id in reversed(await get_user(interaction.user.id, "history")) if (track := voicelink.decode(track_id))["uri"]}
+        raw_history = await get_user(interaction.user.id, "history")
+        history = {
+            track["identifier"]: track
+            for item in reversed(raw_history)
+            if (track := voicelink.decode(item["track_id"] if isinstance(item, dict) else item))["uri"]
+        }
         return [app_commands.Choice(name=truncate_string(f"🕒 {track['author']} - {track['title']}", 100), value=track['uri']) for track in history.values() if len(track['uri']) <= 100][:25]
             
     @commands.hybrid_command(name="connect", aliases=get_aliases("connect"))
@@ -865,10 +872,15 @@ class Basic(commands.Cog):
         embed = view.build_embed(category)
         view.response = await send(ctx, embed, view=view)
 
-    @commands.hybrid_command(name="stats", aliases=get_aliases("stats"))
+    @commands.hybrid_group(name="stats", aliases=get_aliases("stats"), fallback="bot", invoke_without_command=True)
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
     async def stats(self, ctx: commands.Context):
         """Show bot and system statistics."""
+        if ctx.invoked_subcommand is None:
+            await self.bot(ctx)
+
+    @stats.command(name="bot")
+    async def bot(self, ctx: commands.Context):
         memory = psutil.virtual_memory()
         value = await get_lang(ctx.guild.id, "statsTitle", "statsCPU", "statsMemory", "statsGuilds", "statsUsers")
 
@@ -881,6 +893,18 @@ class Basic(commands.Cog):
         embed.add_field(name=value[3], value=str(len(self.bot.guilds)))
         embed.add_field(name=value[4], value=str(len(self.bot.users)))
 
+        await send(ctx, embed)
+
+    @stats.command(name="guild")
+    async def stats_guild(self, ctx: commands.Context):
+        """Show guild statistics respecting history retention."""
+        history = await get_user(ctx.author.id, "history")
+        embed = discord.Embed(color=settings.embed_color, title="Guild Statistics")
+        embed.add_field(name="History entries", value=str(len(history)))
+        embed.add_field(
+            name="Retention",
+            value=f"Last {HISTORY_MAX_ENTRIES} entries or {HISTORY_RETENTION_DAYS} days",
+        )
         await send(ctx, embed)
 
     @commands.hybrid_command(name="ping", aliases=get_aliases("ping"))
