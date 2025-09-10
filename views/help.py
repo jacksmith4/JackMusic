@@ -87,7 +87,10 @@ class HelpView(discord.ui.View):
                 inline=True
             )
 
-            update = "RhythmoSync is a simple music bot. It leads to a comfortable experience which is user-friendly, It supports YouTube, Soundcloud, Spotify, Twitch and more!"
+            update = (
+                "RhythmoSync is a simple music bot. It leads to a comfortable experience which is user-friendly, "
+                "It supports YouTube, Soundcloud, Spotify, Twitch and more! Now supports crossfade between tracks using /crossfade."
+            )
             embed.add_field(name="📰 Information:", value=update, inline=True)
             embed.add_field(name="Get Started", value="```Join a voice channel and /play {Song/URL} a song. (Names, Youtube Video Links or Playlist links or Spotify links are supported on RhythmoSync)```", inline=False)
             

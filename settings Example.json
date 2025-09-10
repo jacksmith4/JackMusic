@@ -41,6 +41,7 @@
     "embed_color":"0xb3b3b3",
     "default_max_queue": 1000,
     "lyrics_platform": "lrclib",
+    "crossfade_duration": 0,
     "ipc_client": {
         "host": "127.0.0.1",
         "port": 8000,

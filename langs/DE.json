@@ -19,6 +19,7 @@
     "247": "Der 24/7-Modus wurde erfolgreich `{0}`.",
     "bypassVote": "Das Abstimmungssystem wurde `{0}`",
     "setVolume": "Stelle die Lautstärke auf `{0}`%.",
+    "setCrossfade": "Stelle die Überblendungsdauer auf `{0}` Sekunden.",
     "toggleController": "Der Musikcontroller wurde erfolgreich `{0}`",
     "toggleDuplicateTrack": "Du hast das hinzufügen von doppelten Tracks in der Warteschlange `{0}`",
     "toggleControllerMsg": "Nachrichten vom Musik-Controller wurden erfolgreich `{0}`",

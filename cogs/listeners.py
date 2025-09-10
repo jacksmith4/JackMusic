@@ -133,8 +133,9 @@ class Listeners(commands.Cog):
             func.logger.error("Failed to remove session file: %s", file_path, exc_info=del_error)
 
     @commands.Cog.listener()
-    async def on_voicelink_track_end(self, player: voicelink.Player, track, _):
-        await player.do_next()
+    async def on_voicelink_track_end(self, player: voicelink.Player, track, reason):
+        if reason != "replaced":
+            await player.do_next()
 
     @commands.Cog.listener()
     async def on_voicelink_track_stuck(self, player: voicelink.Player, track, _):
