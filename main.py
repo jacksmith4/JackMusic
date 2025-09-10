@@ -58,7 +58,7 @@ class Translator(discord.app_commands.Translator):
 
         return None
 
-class Vocard(commands.Bot):
+class RhythmoSync(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -239,7 +239,7 @@ intents.message_content = False if func.settings.bot_prefix is None else True
 intents.members = func.settings.ipc_client.get("enable", False)
 intents.voice_states = True
 
-bot = Vocard(
+bot = RhythmoSync(
     command_prefix=get_prefix,
     help_command=None,
     tree_cls=CommandCheck,
