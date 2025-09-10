@@ -19,6 +19,7 @@
     "247": "現在您有 `{0}` 24/7 模式。",
     "bypassVote": "現在您有 `{0}` 投票系統。",
     "setVolume": "已將音量設置為 `{0}`%",
+    "setCrossfade": "將交叉淡化時間設置為 `{0}` 秒。",
     "toggleController": "現在您已 `{0}` 音樂控制器。",
     "toggleDuplicateTrack": "現在您已 `{0}` 防止隊列中存在重複曲目。",
     "toggleControllerMsg": "現在您已從音樂控制器 `{0}` 消息。",

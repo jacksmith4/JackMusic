@@ -19,6 +19,7 @@
     "247": "Tryb 24/7: `{0}`",
     "bypassVote": "System głosowania: `{0}`",
     "setVolume": "Ustawiono głośność na `{0}`%",
+    "setCrossfade": "Ustawiono czas crossfade na `{0}` sekund.",
     "toggleController": "Kontroler muzyki: `{0}`",
     "toggleDuplicateTrack": "Unikanie duplikowania pozycji w kolejce: `{0}`",
     "toggleControllerMsg": "Wiadomości od kontrolera muzyki: `{0}`",

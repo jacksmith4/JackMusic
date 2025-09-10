@@ -28,7 +28,8 @@ from function import (
     send,
     get_lang,
     get_aliases,
-    cooldown_check
+    cooldown_check,
+    update_settings
 )
 from addons import get_presets, get_preset, save_preset
 from discord import app_commands
@@ -74,6 +75,24 @@ class Effect(commands.Cog):
         effect = voicelink.Timescale(tag="speed", speed=value)
         await player.add_filter(effect, ctx.author)
         await send(ctx, "addEffect", effect.tag)
+
+    @commands.hybrid_command(name="crossfade", aliases=get_aliases("crossfade"))
+    @app_commands.describe(seconds="Fade duration in seconds. Use 0 to disable.")
+    @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
+    async def crossfade(self, ctx: commands.Context, seconds: commands.Range[int, 0, 30]):
+        "Set crossfade duration between tracks"
+        player = await check_access(ctx)
+
+        player.settings["crossfade_duration"] = seconds
+        player.crossfade_duration = seconds
+
+        if player.is_playing and seconds > 0:
+            if player._crossfade_task:
+                player._crossfade_task.cancel()
+            player._crossfade_task = player.bot.loop.create_task(player._schedule_fade_out(player.current))
+
+        await update_settings(ctx.guild.id, {"crossfade_duration": seconds})
+        await send(ctx, "setCrossfade", seconds)
 
     @commands.hybrid_command(name="karaoke", aliases=get_aliases("karaoke"))
     @app_commands.describe(

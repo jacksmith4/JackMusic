@@ -19,6 +19,7 @@
     "247": "Le mode 24/7 est maintenant `{0}`.",
     "bypassVote": "Vous avez le système de vote `{0}`.",
     "setVolume": "Le volume est réglé à `{0}`%",
+    "setCrossfade": "La durée du fondu enchaîné est réglée sur `{0}` secondes.",
     "toggleController": "Vous avez maintenant `{0}` le contrôleur de musique.",
     "toggleDuplicateTrack": "Vous avez maintenant `{0}` la prévention des morceaux en double.",
     "toggleControllerMsg": "Vous avez maintenant `{0}` les messages du contrôleur musical.",

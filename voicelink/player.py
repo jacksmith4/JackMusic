@@ -25,7 +25,7 @@ import time, logging
 import function as func
 
 from math import ceil
-from asyncio import sleep
+from asyncio import sleep, create_task
 from views import InteractiveController
 from typing import Any, Dict, List, Optional, Union, Tuple
 
@@ -147,6 +147,8 @@ class Player(VoiceProtocol):
 
         self._ph = Placeholders(client, self)
         self._logger: Optional[logging.Logger] = self._node._logger
+        self.crossfade_duration: int = self.settings.get('crossfade_duration', 0)
+        self._crossfade_task = None
 
     def __repr__(self):
         return (
@@ -385,6 +387,10 @@ class Player(VoiceProtocol):
 
         if isinstance(event, TrackStartEvent):
             self._ending_track = self._current
+            if self.crossfade_duration > 0:
+                if self._crossfade_task:
+                    self._crossfade_task.cancel()
+                self._crossfade_task = create_task(self._schedule_fade_out(self._current))
 
         self._logger.debug(f"Player in {self.guild.name}({self.guild.id}) dispatched event {event_type}.")
 
@@ -417,7 +423,13 @@ class Player(VoiceProtocol):
                 return await self.do_next()
         else:
             try:
-                await self.play(track, start=track.position)
+                if self.crossfade_duration > 0:
+                    target_volume = self._volume
+                    await self.set_volume(0)
+                    await self.play(track, start=track.position)
+                    create_task(self._fade_in(target_volume))
+                else:
+                    await self.play(track, start=track.position)
             except Exception as e:
                 self._logger.error(f"Something went wrong while playing music in {self.guild.name}({self.guild.id})", exc_info=e)
                 await sleep(5)
@@ -700,6 +712,30 @@ class Player(VoiceProtocol):
 
         self._logger.debug(f"Player in {self.guild.name}({self.guild.id}) has been update the volume to {volume}.")
         return self._volume
+
+    async def _schedule_fade_out(self, track: Track):
+        delay = (track.length / 1000) - self.crossfade_duration
+        if delay > 0:
+            await sleep(delay)
+        if self.current == track and self.crossfade_duration > 0:
+            await self._fade_out()
+
+    async def _fade_out(self):
+        start_volume = self._volume
+        steps = max(1, int(self.crossfade_duration * 10))
+        step_delay = self.crossfade_duration / steps if steps else 0
+        for i in range(steps):
+            new_volume = int(start_volume - (start_volume * (i + 1) / steps))
+            await self.set_volume(max(new_volume, 0))
+            await sleep(step_delay)
+
+    async def _fade_in(self, target_volume: int):
+        steps = max(1, int(self.crossfade_duration * 10))
+        step_delay = self.crossfade_duration / steps if steps else 0
+        for i in range(steps):
+            new_volume = int(target_volume * (i + 1) / steps)
+            await self.set_volume(new_volume)
+            await sleep(step_delay)
 
     async def shuffle(self, queue_type: str, requester: Member = None) -> None:
         """Shuffles the tracks in the specified queue or history."""

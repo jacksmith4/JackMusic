@@ -19,6 +19,7 @@
     "247": "24/7 mode is now `{0}`.",
     "bypassVote": "You have `{0}` voting system.",
     "setVolume": "Set the volume to `{0}`%",
+    "setCrossfade": "Set crossfade duration to `{0}` seconds.",
     "toggleController": "You now have `{0}` the music controller.",
     "toggleDuplicateTrack": "You have now `{0}` duplicate track prevention.",
     "toggleControllerMsg": "You now have `{0}` messages from the music controller.",
