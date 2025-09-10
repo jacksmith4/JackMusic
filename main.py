@@ -113,6 +113,7 @@ class RhythmoSync(commands.Bot):
 
         func.SETTINGS_DB = func.MONGO_DB[db_name]["Settings"]
         func.USERS_DB = func.MONGO_DB[db_name]["Users"]
+        func.STATS_DB = func.MONGO_DB[db_name]["Stats"]
 
     async def setup_hook(self) -> None:
         func.langs_setup()

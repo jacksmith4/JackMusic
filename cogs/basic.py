@@ -21,7 +21,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import discord, voicelink, re, psutil
+import discord, voicelink, re, psutil, time
+
+from collections import Counter
 
 from io import StringIO
 from discord import app_commands
@@ -38,7 +40,8 @@ from function import (
     format_bytes,
     cooldown_check,
     get_aliases,
-    logger
+    logger,
+    get_guild_stats,
 )
 
 from voicelink import SearchType, LoopType
@@ -865,7 +868,7 @@ class Basic(commands.Cog):
         embed = view.build_embed(category)
         view.response = await send(ctx, embed, view=view)
 
-    @commands.hybrid_command(name="stats", aliases=get_aliases("stats"))
+    @commands.hybrid_group(name="stats", aliases=get_aliases("stats"), invoke_without_command=True)
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
     async def stats(self, ctx: commands.Context):
         """Show bot and system statistics."""
@@ -882,6 +885,25 @@ class Basic(commands.Cog):
         embed.add_field(name=value[4], value=str(len(self.bot.users)))
 
         await send(ctx, embed)
+
+    @stats.command(name="guild")
+    @app_commands.describe(days="Lookback period in days, 0 for all time")
+    async def stats_guild(self, ctx: commands.Context, days: int = 7):
+        """Show guild listening statistics."""
+        data = await get_guild_stats(ctx.guild.id)
+        history = data.get("history", [])
+        if days > 0:
+            cutoff = time.time() - days * 86400
+            history = [h for h in history if h.get("timestamp", 0) >= cutoff]
+        if not history:
+            return await send(ctx, "guildStatsNoData")
+
+        track_count = len(history)
+        total_duration = sum(h.get("duration", 0) for h in history)
+        counter = Counter(str(h.get("requester")) for h in history)
+        top = "\n".join(f"<@{uid}> — {cnt}" for uid, cnt in counter.most_common(5)) or "-"
+
+        await send(ctx, "guildStats", days, track_count, ctime(total_duration), top)
 
     @commands.hybrid_command(name="ping", aliases=get_aliases("ping"))
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
