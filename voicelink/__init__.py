@@ -1,6 +1,6 @@
 """MIT License
 
-Copyright (c) 2023 - present Vocard Development
+Copyright (c) 2023 - present RhythmoSync Development
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,9 +22,9 @@ SOFTWARE.
 """
 
 __version__ = "1.4"
-__author__ = 'Vocard Development, ChocoMeow'
+__author__ = 'RhythmoSync Development, ChocoMeow'
 __license__ = "MIT"
-__copyright__ = "Copyright 2023 - present (c) Vocard Development, ChocoMeow"
+__copyright__ = "Copyright 2023 - present (c) RhythmoSync Development, ChocoMeow"
 
 from .enums import SearchType, LoopType
 from .events import *
