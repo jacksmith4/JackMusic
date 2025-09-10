@@ -23,7 +23,7 @@ if not os.path.exists(os.path.join(ROOT_DIR, "settings.json")):
 
 #--------------- Cache Var ---------------
 settings: Settings
-logger: logging.Logger = logging.getLogger("vocard")
+logger: logging.Logger = logging.getLogger("rhythmosync")
 
 MONGO_DB: AsyncIOMotorClient
 SETTINGS_DB: AsyncIOMotorCollection
@@ -49,7 +49,7 @@ USER_BASE: dict[str, Any] = {
 
 ALLOWED_MENTIONS = discord.AllowedMentions().none()
 
-#-------------- Vocard Functions --------------
+#-------------- RhythmoSync Functions --------------
 def open_json(path: str) -> dict:
     try:
         with open(os.path.join(ROOT_DIR, path), encoding="utf8") as json_file:

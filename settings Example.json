@@ -26,7 +26,7 @@
         },
         "level": {
             "discord": "INFO",
-            "vocard": "INFO",
+            "rhythmosync": "INFO",
             "ipc_client": "INFO"
         },
         "max-history": 30

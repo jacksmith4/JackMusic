@@ -1,6 +1,6 @@
 """MIT License
 
-Copyright (c) 2023 - present Vocard Development
+Copyright (c) 2023 - present RhythmoSync Development
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,8 +34,8 @@ class HelpDropdown(discord.ui.Select):
             placeholder="Select Category!",
             min_values=1, max_values=1,
             options=[
-                discord.SelectOption(emoji="🆕", label="News", description="View new updates of Vocard."),
-                discord.SelectOption(emoji="🕹️", label="Tutorial", description="How to use Vocard."),
+                discord.SelectOption(emoji="🆕", label="News", description="View new updates of RhythmoSync."),
+                discord.SelectOption(emoji="🕹️", label="Tutorial", description="How to use RhythmoSync."),
             ] + [
                 discord.SelectOption(emoji=emoji, label=f"{category} Commands", description=f"This is {category.lower()} Category.")
                 for category, emoji in zip(categorys, ["1️⃣", "2️⃣", "3️⃣", "4️⃣", "5️⃣", "6️⃣", "7️⃣"])
@@ -56,10 +56,10 @@ class HelpView(discord.ui.View):
         self.response: discord.Message = None
         self.categorys: list[str] = [ name.capitalize() for name, cog in bot.cogs.items() if len([c for c in cog.walk_commands()]) ]
 
-        self.add_item(discord.ui.Button(label='Website', emoji='🌎', url='https://vocard.xyz'))
-        self.add_item(discord.ui.Button(label='Document', emoji=':support:915152950471581696', url='https://docs.vocard.xyz'))
-        self.add_item(discord.ui.Button(label='Github', emoji=':github:1098265017268322406', url='https://github.com/ChocoMeow/Vocard'))
-        self.add_item(discord.ui.Button(label='Donate', emoji=':patreon:913397909024800878', url='https://www.patreon.com/Vocard'))
+        self.add_item(discord.ui.Button(label='Website', emoji='🌎', url='https://rhythmosync.xyz'))
+        self.add_item(discord.ui.Button(label='Document', emoji=':support:915152950471581696', url='https://docs.rhythmosync.xyz'))
+        self.add_item(discord.ui.Button(label='Github', emoji=':github:1098265017268322406', url='https://github.com/ChocoMeow/RhythmoSync'))
+        self.add_item(discord.ui.Button(label='Donate', emoji=':patreon:913397909024800878', url='https://www.patreon.com/RhythmoSync'))
         self.add_item(HelpDropdown(self.categorys))
     
     async def on_error(self, error, item, interaction) -> None:
@@ -80,16 +80,16 @@ class HelpView(discord.ui.View):
     def build_embed(self, category: str) -> discord.Embed:
         category = category.lower()
         if category == "news":
-            embed = discord.Embed(title="Vocard Help Menu", url="https://discord.com/channels/811542332678996008/811909963718459392/1069971173116481636", color=func.settings.embed_color)
+            embed = discord.Embed(title="RhythmoSync Help Menu", url="https://discord.com/channels/811542332678996008/811909963718459392/1069971173116481636", color=func.settings.embed_color)
             embed.add_field(
                 name=f"Available Categories: [{2 + len(self.categorys)}]",
                 value="```py\n👉 News\n2. Tutorial\n{}```".format("".join(f"{i}. {c}\n" for i, c in enumerate(self.categorys, start=3))),
                 inline=True
             )
 
-            update = "Vocard is a simple music bot. It leads to a comfortable experience which is user-friendly, It supports YouTube, Soundcloud, Spotify, Twitch and more!"
+            update = "RhythmoSync is a simple music bot. It leads to a comfortable experience which is user-friendly, It supports YouTube, Soundcloud, Spotify, Twitch and more!"
             embed.add_field(name="📰 Information:", value=update, inline=True)
-            embed.add_field(name="Get Started", value="```Join a voice channel and /play {Song/URL} a song. (Names, Youtube Video Links or Playlist links or Spotify links are supported on Vocard)```", inline=False)
+            embed.add_field(name="Get Started", value="```Join a voice channel and /play {Song/URL} a song. (Names, Youtube Video Links or Playlist links or Spotify links are supported on RhythmoSync)```", inline=False)
             
             return embed
 
@@ -97,7 +97,7 @@ class HelpView(discord.ui.View):
         embed.add_field(name=f"Categories: [{2 + len(self.categorys)}]", value="```py\n" + "\n".join(("👉 " if c == category.capitalize() else f"{i}. ") + c for i, c in enumerate(['News', 'Tutorial'] + self.categorys, start=1)) + "```", inline=True)
 
         if category == 'tutorial':
-            embed.description = "How can use Vocard? Some simple commands you should know now after watching this video."
+            embed.description = "How can use RhythmoSync? Some simple commands you should know now after watching this video."
             embed.set_image(url="https://cdn.discordapp.com/attachments/674788144931012638/917656288899514388/final_61aef3aa7836890135c6010c_669380.gif")
         else:
             cog = [c for _, c in self.bot.cogs.items() if _.lower() == category][0]

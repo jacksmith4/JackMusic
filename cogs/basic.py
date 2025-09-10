@@ -1,6 +1,6 @@
 """MIT License
 
-Copyright (c) 2023 - present Vocard Development
+Copyright (c) 2023 - present RhythmoSync Development
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -852,7 +852,7 @@ class Basic(commands.Cog):
     @app_commands.autocomplete(category=help_autocomplete)
     @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
     async def help(self, ctx: commands.Context, category: str = "News") -> None:
-        "Lists all the commands in Vocard."
+        "Lists all the commands in RhythmoSync."
         if category not in self.bot.cogs:
             category = "News"
         view = HelpView(self.bot, ctx.author)
