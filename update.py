@@ -1,6 +1,6 @@
 """MIT License
 
-Copyright (c) 2023 - present Vocard Development
+Copyright (c) 2023 - present RhythmoSync Development
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,9 +35,9 @@ __version__ = "v2.7.2"
 
 # URLs for update and migration
 PYTHON_CMD_NAME = os.path.basename(sys.executable)
-GITHUB_API_URL = "https://api.github.com/repos/ChocoMeow/Vocard/releases/latest"
-VOCARD_URL = "https://github.com/ChocoMeow/Vocard/archive/"
-MIGRATION_SCRIPT_URL = f"https://raw.githubusercontent.com/ChocoMeow/Vocard-Magration/main/{__version__}.py"
+GITHUB_API_URL = "https://api.github.com/repos/ChocoMeow/RhythmoSync/releases/latest"
+RHYTHMOSYNC_URL = "https://github.com/ChocoMeow/RhythmoSync/archive/"
+MIGRATION_SCRIPT_URL = f"https://raw.githubusercontent.com/ChocoMeow/RhythmoSync-Magration/main/{__version__}.py"
 IGNORE_FILES = ["settings.json", "logs", "last-session.json"]
 
 class bcolors:
@@ -76,8 +76,8 @@ def download_file(version=None):
         Response: the downloaded zip file content.
     """
     version = version if version else check_version()
-    print(f"Downloading Vocard version: {version}")
-    response = requests.get(VOCARD_URL + version + ".zip")
+    print(f"Downloading RhythmoSync version: {version}")
+    response = requests.get(RHYTHMOSYNC_URL + version + ".zip")
     if response.status_code == 404:
         print(f"{bcolors.FAIL}Warning: Version not found!{bcolors.ENDC}")
         exit(1)
@@ -106,10 +106,10 @@ def install(response, version):
 
         # Remove 'v' from the version string for folder name.
         version_without_v = version.replace("v", "")
-        source_dir = os.path.join(ROOT_DIR, f"Vocard-{version_without_v}")
+        source_dir = os.path.join(ROOT_DIR, f"RhythmoSync-{version_without_v}")
         if os.path.exists(source_dir):
             for filename in os.listdir(ROOT_DIR):
-                if filename in IGNORE_FILES + [f"Vocard-{version_without_v}"]:
+                if filename in IGNORE_FILES + [f"RhythmoSync-{version_without_v}"]:
                     continue
 
                 filename_path = os.path.join(ROOT_DIR, filename)
@@ -157,11 +157,11 @@ def run_migration():
 
 def parse_args():
     """Parse command line arguments."""
-    parser = argparse.ArgumentParser(description='Update and migration script for Vocard.')
-    parser.add_argument('-c', '--check', action='store_true', help='Check the current version of the Vocard')
-    parser.add_argument('-v', '--version', type=str, help='Install the specified version of the Vocard')
-    parser.add_argument('-l', '--latest', action='store_true', help='Install the latest version of the Vocard from Github')
-    parser.add_argument('-b', '--beta', action='store_true', help='Install the beta version of the Vocard from Github')
+    parser = argparse.ArgumentParser(description='Update and migration script for RhythmoSync.')
+    parser.add_argument('-c', '--check', action='store_true', help='Check the current version of the RhythmoSync')
+    parser.add_argument('-v', '--version', type=str, help='Install the specified version of the RhythmoSync')
+    parser.add_argument('-l', '--latest', action='store_true', help='Install the latest version of the RhythmoSync from Github')
+    parser.add_argument('-b', '--beta', action='store_true', help='Install the beta version of the RhythmoSync from Github')
     parser.add_argument('-m', '--migration', action='store_true', help='Download and run the migration script from Github')
     return parser.parse_args()
 

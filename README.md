@@ -2,8 +2,8 @@
     <img src="https://img.shields.io/discord/811542332678996008?color=7289DA&label=Support&logo=discord&style=for-the-badge" alt="Discord">
 </a>
 
-# Vocard Bot
-Vocard is a highly customizable Discord music bot, designed to deliver a user-friendly experience. It offers support for a wide range of streaming platforms including Youtube, Soundcloud, Spotify, Twitch, and more.
+# RhythmoSync Bot
+RhythmoSync is a highly customizable Discord music bot, designed to deliver a user-friendly experience. It offers support for a wide range of streaming platforms including Youtube, Soundcloud, Spotify, Twitch, and more.
 
 ## Features
 * Fast song loading
@@ -19,7 +19,7 @@ Vocard is a highly customizable Discord music bot, designed to deliver a user-fr
 * Multiple languages available
 * Easy to update
 * Supports docker
-* [Premium dashboard](https://github.com/ChocoMeow/Vocard-Dashboard)
+* [Premium dashboard](https://github.com/ChocoMeow/RhythmoSync-Dashboard)
 
 ## Screenshot
 ![features](https://github.com/user-attachments/assets/2a1baf75-d1c8-41d1-a66f-7011e96d5feb)
@@ -29,8 +29,8 @@ Vocard is a highly customizable Discord music bot, designed to deliver a user-fr
 * [Lavalink Server (Requires 4.0.0+)](https://github.com/freyacodes/Lavalink)
 
 ## Setup
-Please see the [Setup Page](https://docs.vocard.xyz/latest/bot/setup) in the docs to run this bot yourself!
+Please see the [Setup Page](https://docs.rhythmosync.xyz/latest/bot/setup) in the docs to run this bot yourself!
 
 ## Need Help?
-Join the [Vocard Support Discord](https://discord.gg/wRCgB7vBQv) for help or questions.
+Join the [RhythmoSync Support Discord](https://discord.gg/wRCgB7vBQv) for help or questions.
 
