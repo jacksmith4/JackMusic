@@ -40,6 +40,8 @@
     "statsMemory": "Memory Usage",
     "statsGuilds": "Servers",
     "statsUsers": "Users",
+    "guildStats": "📈 Guild stats for last {0} days:\nTracks played: {1}\nTotal duration: {2}\nTop requesters:\n{3}",
+    "guildStatsNoData": "No stats available for this time range.",
     "addEffect": "Wende den Effekt `{0}` Filter an.",
     "clearEffect": "Die Soundeffekte wurden gelöscht!",
     "filterTagAlreadyInUse": "Diese Soundeffekte sind bereits im Einsatz! Bitte verwende /cleareffect <Tag>, um sie zu entfernen.",

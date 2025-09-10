@@ -385,6 +385,15 @@ class Player(VoiceProtocol):
 
         if isinstance(event, TrackStartEvent):
             self._ending_track = self._current
+            try:
+                await func.track_start_stats(self.guild.id, self._current.requester.id)
+            except Exception:
+                pass
+        elif isinstance(event, TrackEndEvent) and self._ending_track:
+            try:
+                await func.track_end_stats(self.guild.id, self._ending_track.length)
+            except Exception:
+                pass
 
         self._logger.debug(f"Player in {self.guild.name}({self.guild.id}) dispatched event {event_type}.")
 

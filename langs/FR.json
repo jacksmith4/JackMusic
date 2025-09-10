@@ -173,5 +173,7 @@
     "invalidEndTime": "Heure de fin invalide, doit être entre `00:00` et `{0}`",
     "invalidTimeOrder": "L'heure de fin ne peut pas être inférieure ou égale à celle de début",
     "setStageAnnounceTemplate": "C'est fait ! Désormais, le statut vocal tel que celui dans lequel vous êtes sera nommé selon votre modèle. Vous devriez le voir se mettre à jour dans quelques secondes.",
-    "createSongRequestChannel": "Un salon de demande de chansons ({0}) a été créé ! Vous pouvez commencer à demander n'importe quelle chanson par nom ou URL dans ce salon, sans besoin d'utiliser le préfixe du bot."
+    "createSongRequestChannel": "Un salon de demande de chansons ({0}) a été créé ! Vous pouvez commencer à demander n'importe quelle chanson par nom ou URL dans ce salon, sans besoin d'utiliser le préfixe du bot.",
+    "guildStats": "📈 Guild stats for last {0} days:\nTracks played: {1}\nTotal duration: {2}\nTop requesters:\n{3}",
+    "guildStatsNoData": "No stats available for this time range."
 }

@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import discord, json, os, copy, logging
+import discord, json, os, copy, logging, time
 
 from discord.ext import commands
 from time import strptime
@@ -51,11 +51,13 @@ logger: logging.Logger = logging.getLogger("vocard")
 MONGO_DB: AsyncIOMotorClient
 SETTINGS_DB: AsyncIOMotorCollection
 USERS_DB: AsyncIOMotorCollection
+STATS_DB: AsyncIOMotorCollection
 
 LANGS: dict[str, dict[str, str]] = {} #Stores all the languages in ./langs
 LOCAL_LANGS: dict[str, dict[str, str]] = {} #Stores all the localization languages in ./local_langs
 SETTINGS_BUFFER: dict[int, dict[str, Any]] = {} #Cache guild language
 USERS_BUFFER: dict[str, dict] = {}
+GUILD_STATS: dict[int, dict[str, Any]] = {}
 
 MISSING_TRANSLATOR: dict[str, list[str]] = {}
 
@@ -164,10 +166,15 @@ def get_lang_non_async(guild_id: int, *keys) -> Union[list[str], str]:
     lang = settings.get("lang", "EN")
     if lang in LANGS and not LANGS[lang]:
         LANGS[lang] = open_json(os.path.join("langs", f"{lang}.json"))
+    if "EN" not in LANGS or not LANGS["EN"]:
+        LANGS["EN"] = open_json(os.path.join("langs", "EN.json"))
+
+    def fetch(key: str) -> str:
+        return LANGS.get(lang, {}).get(key) or LANGS["EN"].get(key, "Not found!")
 
     if len(keys) == 1:
-        return LANGS.get(lang, {}).get(keys[0], "Not found!")
-    return [LANGS.get(lang, {}).get(key, "Not found!") for key in keys]
+        return fetch(keys[0])
+    return [fetch(key) for key in keys]
 
 def format_bytes(bytes: int, unit: bool = False):
     if bytes <= 1_000_000_000:
@@ -181,10 +188,15 @@ async def get_lang(guild_id:int, *keys) -> Optional[Union[list[str], str]]:
     lang = settings.get("lang", "EN")
     if lang in LANGS and not LANGS[lang]:
         LANGS[lang] = open_json(os.path.join("langs", f"{lang}.json"))
+    if "EN" not in LANGS or not LANGS["EN"]:
+        LANGS["EN"] = open_json(os.path.join("langs", "EN.json"))
+
+    def fetch(key: str) -> Optional[str]:
+        return LANGS.get(lang, {}).get(key) or LANGS["EN"].get(key)
 
     if len(keys) == 1:
-        return LANGS.get(lang, {}).get(keys[0])
-    return [LANGS.get(lang, {}).get(key) for key in keys]
+        return fetch(keys[0])
+    return [fetch(key) for key in keys]
 
 async def send(
     ctx: Union[commands.Context, discord.Interaction],
@@ -326,3 +338,42 @@ async def get_user(user_id: int, d_type: Optional[str] = None, need_copy: bool =
 async def update_user(user_id:int, data:dict) -> bool:
     playlist = await get_user(user_id, need_copy=False)
     return await update_db(USERS_DB, playlist, {"_id": user_id}, data)
+
+
+# ------------------- Stats -------------------
+async def get_guild_stats(guild_id: int) -> dict[str, Any]:
+    stats = GUILD_STATS.get(guild_id)
+    if not stats and STATS_DB:
+        stats = await STATS_DB.find_one({"_id": guild_id})
+        if not stats:
+            stats = {"_id": guild_id, "track_count": 0, "total_duration": 0, "requesters": {}, "history": []}
+            await STATS_DB.insert_one(stats)
+        GUILD_STATS[guild_id] = stats
+    return stats or {"_id": guild_id, "track_count": 0, "total_duration": 0, "requesters": {}, "history": []}
+
+
+async def track_start_stats(guild_id: int, requester_id: int):
+    stats = await get_guild_stats(guild_id)
+    stats["track_count"] = stats.get("track_count", 0) + 1
+    reqs = stats.setdefault("requesters", {})
+    reqs[str(requester_id)] = reqs.get(str(requester_id), 0) + 1
+    stats.setdefault("history", []).append({"timestamp": int(time.time()), "requester": requester_id, "duration": 0})
+    if STATS_DB:
+        await STATS_DB.update_one(
+            {"_id": guild_id},
+            {"$set": {"track_count": stats["track_count"], "requesters": reqs, "history": stats["history"]}},
+            upsert=True,
+        )
+
+
+async def track_end_stats(guild_id: int, duration: int):
+    stats = await get_guild_stats(guild_id)
+    stats["total_duration"] = stats.get("total_duration", 0) + duration
+    if stats.get("history"):
+        stats["history"][-1]["duration"] = duration
+    if STATS_DB:
+        await STATS_DB.update_one(
+            {"_id": guild_id},
+            {"$set": {"total_duration": stats["total_duration"], "history": stats["history"]}},
+            upsert=True,
+        )

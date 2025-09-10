@@ -173,5 +173,7 @@
     "invalidEndTime": "Niepoprawny czas końca, musi on mieścić się pomiędzy `00:00` a `{0}`",
     "invalidTimeOrder": "Czas zakończenia odtwarzania nie może być mniejszy lub równy czasowi startu",
     "setStageAnnounceTemplate": "Gotowe! Od tego momentu status kanału w którym znajduje się bot będzie wyglądał tak jak podany szablon. Aktualizacja powinna nastąpić za kilka sekund.",
-    "createSongRequestChannel": "Utworzono kanał do obsługi bota - ({0})! Możesz w nim dodawać utwory po nazwie lub adresie URL bez dodawnia prefixu"
+    "createSongRequestChannel": "Utworzono kanał do obsługi bota - ({0})! Możesz w nim dodawać utwory po nazwie lub adresie URL bez dodawnia prefixu",
+    "guildStats": "📈 Guild stats for last {0} days:\nTracks played: {1}\nTotal duration: {2}\nTop requesters:\n{3}",
+    "guildStatsNoData": "No stats available for this time range."
 }

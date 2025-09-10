@@ -173,5 +173,7 @@
     "invalidEndTime": "Thời gian kết thúc không hợp lệ, phải nằm giữa `00:00` và `{0}`",
     "invalidTimeOrder": "Thời gian kết thúc không thể nhỏ hơn hoặc bằng thời gian bắt đầu",
     "setStageAnnounceTemplate": "Hoàn thành! Từ bây giờ, trạng thái voice như cái bạn đang ở sẽ được đặt tên theo mẫu của bạn. Bạn sẽ thấy nó cập nhật trong vài giây.",
-    "createSongRequestChannel": "Một kênh yêu cầu bài hát ({0}) đã được tạo! Bạn có thể bắt đầu yêu cầu bất kỳ bài hát nào bằng tên hoặc URL trong kênh đó, mà không cần sử dụng tiền tố bot."
+    "createSongRequestChannel": "Một kênh yêu cầu bài hát ({0}) đã được tạo! Bạn có thể bắt đầu yêu cầu bất kỳ bài hát nào bằng tên hoặc URL trong kênh đó, mà không cần sử dụng tiền tố bot.",
+    "guildStats": "📈 Guild stats for last {0} days:\nTracks played: {1}\nTotal duration: {2}\nTop requesters:\n{3}",
+    "guildStatsNoData": "No stats available for this time range."
 }
