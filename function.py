@@ -69,7 +69,8 @@ USER_BASE: dict[str, Any] = {
         }
     },
     'history': [],
-    'inbox':[]
+    'inbox':[],
+    'equalizer_presets': {}
 }
 
 ALLOWED_MENTIONS = discord.AllowedMentions().none()

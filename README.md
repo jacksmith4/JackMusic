@@ -20,6 +20,7 @@ RhythmoSync is a highly customizable Discord music bot, designed to deliver a us
 * Easy to update
 * Supports docker
 * [Premium dashboard](https://github.com/ChocoMeow/RhythmoSync-Dashboard)
+* Save and apply custom equalizer presets
 
 ## Screenshot
 ![features](https://github.com/user-attachments/assets/2a1baf75-d1c8-41d1-a66f-7011e96d5feb)
@@ -33,4 +34,11 @@ Please see the [Setup Page](https://docs.rhythmosync.xyz/latest/bot/setup) in th
 
 ## Need Help?
 Join the [RhythmoSync Support Discord](https://discord.gg/wRCgB7vBQv) for help or questions.
+
+## Equalizer Preset Commands
+Use `/eq` to manage personal equalizer presets.
+
+- `/eq save <name>` - Save your current equalizer settings.
+- `/eq apply <name>` - Apply a saved or built-in preset.
+- `/eq list` - List all saved presets.
 

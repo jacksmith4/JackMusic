@@ -173,5 +173,11 @@
     "invalidEndTime": "Недействительное значение! Диапозон времени должен быть между `00:00` и `{0}`.",
     "invalidTimeOrder": "Время конца трека не может быть меньше или равно времени начала.",
     "setStageAnnounceTemplate": "Готово! Новые настройки статуса канала скоро применятся в соответсвии с вашим шаблоном.",
-    "createSongRequestChannel": "Канал для запроса песен ({0}) создан! Вы можете запросить любую песню по названию или URL в этом канале без использования префикса бота."
+    "createSongRequestChannel": "Канал для запроса песен ({0}) создан! Вы можете запросить любую песню по названию или URL в этом канале без использования префикса бота.",
+    "eqSave": "Saved EQ preset `{0}`.",
+    "eqApply": "Applied EQ preset `{0}`.",
+    "eqList": "Your EQ presets: {0}",
+    "eqNotFound": "Preset `{0}` not found.",
+    "eqNoPresets": "You have no saved EQ presets.",
+    "eqNoFilter": "There is no equalizer filter to save."
 }

@@ -173,5 +173,11 @@
     "invalidEndTime": "Invalid end time, it must be between `00:00` and `{0}`",
     "invalidTimeOrder": "End time cannot be less than or equal to start time",
     "setStageAnnounceTemplate": "Done! From now on, voice status like the one you're in now will be named according to your template. You should see it update in a few seconds.",
-    "createSongRequestChannel": "A song request channel ({0}) has been created! You can start requesting any song by name or URL in that channel, without needing to use the bot prefix."
+    "createSongRequestChannel": "A song request channel ({0}) has been created! You can start requesting any song by name or URL in that channel, without needing to use the bot prefix.",
+    "eqSave": "Saved EQ preset `{0}`.",
+    "eqApply": "Applied EQ preset `{0}`.",
+    "eqList": "Your EQ presets: {0}",
+    "eqNotFound": "Preset `{0}` not found.",
+    "eqNoPresets": "You have no saved EQ presets.",
+    "eqNoFilter": "There is no equalizer filter to save."
 }
