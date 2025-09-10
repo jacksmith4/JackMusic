@@ -149,6 +149,7 @@ class Player(VoiceProtocol):
         self._logger: Optional[logging.Logger] = self._node._logger
         self.crossfade_duration: int = self.settings.get('crossfade_duration', 0)
         self._crossfade_task = None
+        self._track_start_time: Optional[float] = None
 
     def __repr__(self):
         return (
@@ -387,10 +388,22 @@ class Player(VoiceProtocol):
 
         if isinstance(event, TrackStartEvent):
             self._ending_track = self._current
+            self._track_start_time = time.time() * 1000
             if self.crossfade_duration > 0:
                 if self._crossfade_task:
                     self._crossfade_task.cancel()
                 self._crossfade_task = create_task(self._schedule_fade_out(self._current))
+        elif isinstance(event, TrackEndEvent):
+            elapsed = 0
+            if self._track_start_time:
+                elapsed = int((time.time() * 1000) - self._track_start_time)
+                self._track_start_time = None
+            track_end_stats = getattr(func, "track_end_stats", None)
+            if track_end_stats and event.reason != "replaced":
+                try:
+                    await track_end_stats(self.guild.id, elapsed)
+                except TypeError:
+                    track_end_stats(self.guild.id, elapsed)
 
         self._logger.debug(f"Player in {self.guild.name}({self.guild.id}) dispatched event {event_type}.")
 
