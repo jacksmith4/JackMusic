@@ -21,7 +21,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import discord, json, os, copy, logging
+import discord, json, os, copy, logging, asyncio
 
 from discord.ext import commands
 from time import strptime
@@ -59,6 +59,8 @@ USERS_BUFFER: dict[str, dict] = {}
 
 MISSING_TRANSLATOR: dict[str, list[str]] = {}
 
+DB_LOCK = asyncio.Lock()
+
 USER_BASE: dict[str, Any] = {
     'playlist': {
         '200': {
@@ -70,7 +72,10 @@ USER_BASE: dict[str, Any] = {
     },
     'history': [],
     'inbox':[],
-    'equalizer_presets': {}
+    'equalizer_presets': {},
+    'track_count': 0,
+    'total_duration': 0,
+    'requesters': []
 }
 
 ALLOWED_MENTIONS = discord.AllowedMentions().none()
@@ -251,49 +256,53 @@ async def send(
     return message
 
 async def update_db(db: AsyncIOMotorCollection, tempStore: dict, filter: dict, data: dict) -> bool:
-    for mode, action in data.items():
-        for key, value in action.items():
-            cursors = key.split(".")
+    async with DB_LOCK:
+        for mode, action in data.items():
+            for key, value in action.items():
+                cursors = key.split(".")
 
-            nested_data = tempStore
-            for c in cursors[:-1]:
-                nested_data = nested_data.setdefault(c, {})
+                nested_data = tempStore
+                for c in cursors[:-1]:
+                    nested_data = nested_data.setdefault(c, {})
 
-            if mode == "$set":
-                try:
-                    nested_data[cursors[-1]] = value
-                except TypeError:
-                    nested_data[int(cursors[-1])] = value
+                if mode == "$set":
+                    try:
+                        nested_data[cursors[-1]] = value
+                    except TypeError:
+                        nested_data[int(cursors[-1])] = value
 
-            elif mode == "$unset":
-                nested_data.pop(cursors[-1], None)
+                elif mode == "$unset":
+                    nested_data.pop(cursors[-1], None)
 
-            elif mode == "$inc":
-                nested_data[cursors[-1]] = nested_data.get(cursors[-1], 0) + value
+                elif mode == "$inc":
+                    nested_data[cursors[-1]] = nested_data.get(cursors[-1], 0) + value
 
-            elif mode == "$push":
-                if isinstance(value, dict) and "$each" in value:
-                    nested_data.setdefault(cursors[-1], []).extend(value["$each"][value.get("$slice", len(value["$each"])):])
+                elif mode == "$push":
+                    arr = nested_data.setdefault(cursors[-1], [])
+                    if isinstance(value, dict) and "$each" in value:
+                        arr.extend(value["$each"])
+                        if "$slice" in value:
+                            arr[:] = arr[value["$slice"]:]
+                    else:
+                        arr.append(value)
+
+                elif mode == "$addToSet":
+                    arr = nested_data.setdefault(cursors[-1], [])
+                    values = value.get("$each", []) if isinstance(value, dict) else [value]
+                    for v in values:
+                        if v not in arr:
+                            arr.append(v)
+
+                elif mode == "$pull":
+                    if cursors[-1] in nested_data:
+                        vals = value.get("$in", []) if isinstance(value, dict) else [value]
+                        nested_data[cursors[-1]] = [item for item in nested_data[cursors[-1]] if item not in vals]
+
                 else:
-                    nested_data.setdefault(cursors[-1], []).extend([value])
-                    
-            elif mode == "$push":
-                if isinstance(value, dict) and "$each" in value:
-                    nested_data.setdefault(cursors[-1], []).extend(value["$each"])
-                    nested_data[cursors[-1]] = nested_data[cursors[-1]][value.get("$slice", len(value["$each"])):]
-                else:
-                    nested_data.setdefault(cursors[-1], []).extend([value])
+                    return False
 
-            elif mode == "$pull":
-                if cursors[-1] in nested_data:
-                    value = value.get("$in", []) if isinstance(value, dict) else [value]
-                    nested_data[cursors[-1]] = [item for item in nested_data[cursors[-1]] if item not in value]
-                    
-            else:
-                return False
-
-    result = await db.update_one(filter, data)
-    return result.modified_count > 0
+        result = await db.update_one(filter, data)
+        return result.modified_count > 0
 
 async def get_settings(guild_id:int) -> dict[str, Any]:
     settings = SETTINGS_BUFFER.get(guild_id, None)
