@@ -30,6 +30,7 @@ from function import (
     get_aliases,
     cooldown_check
 )
+from addons import get_presets, get_preset, save_preset
 from discord import app_commands
 from discord.ext import commands
 
@@ -216,6 +217,57 @@ class Effect(commands.Cog):
         effect = voicelink.Timescale.vaporwave()
         await player.add_filter(effect, ctx.author)
         await send(ctx, "addEffect", effect.tag)
+
+    @commands.hybrid_group(name="eq", aliases=get_aliases("eq"), invoke_without_command=True)
+    @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
+    async def eq(self, ctx: commands.Context):
+        """List saved equalizer presets."""
+        presets = await get_presets(ctx.author.id)
+        if not presets:
+            return await send(ctx, "eqNoPresets", ephemeral=True)
+        await send(ctx, "eqList", ", ".join(presets))
+
+    @eq.command(name="save")
+    @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
+    async def eq_save(self, ctx: commands.Context, name: str):
+        """Save the current equalizer settings as a preset."""
+        player = await check_access(ctx)
+        eq_filter = next((f for f in player.filters.get_filters() if isinstance(f, voicelink.filters.Equalizer)), None)
+        if not eq_filter:
+            return await send(ctx, "eqNoFilter", ephemeral=True)
+        levels = [list(b) for b in eq_filter.raw]
+        await save_preset(ctx.author.id, name, levels)
+        await send(ctx, "eqSave", name)
+
+    @eq.command(name="apply")
+    @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
+    async def eq_apply(self, ctx: commands.Context, name: str):
+        """Apply a saved or built-in equalizer preset."""
+        player = await check_access(ctx)
+
+        preset = await get_preset(ctx.author.id, name)
+        effect = None
+        if preset:
+            effect = voicelink.filters.Equalizer(levels=[tuple(x) for x in preset])
+        else:
+            factory = getattr(voicelink.filters.Equalizer, name, None)
+            if callable(factory):
+                effect = factory()
+
+        if not effect:
+            return await send(ctx, "eqNotFound", name, ephemeral=True)
+
+        if player.filters.has_filter(filter_tag="equalizer"):
+            player.filters.remove_filter(filter_tag="equalizer")
+
+        await player.add_filter(effect, ctx.author)
+        await send(ctx, "eqApply", name)
+
+    @eq.command(name="list")
+    @commands.dynamic_cooldown(cooldown_check, commands.BucketType.guild)
+    async def eq_list(self, ctx: commands.Context):
+        """List saved equalizer presets."""
+        await self.eq(ctx)
 
     @commands.hybrid_command(name="cleareffect", aliases=get_aliases("cleareffect"))
     @app_commands.describe(effect="Remove a specific sound effects.")

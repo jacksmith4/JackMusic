@@ -173,5 +173,11 @@
     "invalidEndTime": "Heure de fin invalide, doit être entre `00:00` et `{0}`",
     "invalidTimeOrder": "L'heure de fin ne peut pas être inférieure ou égale à celle de début",
     "setStageAnnounceTemplate": "C'est fait ! Désormais, le statut vocal tel que celui dans lequel vous êtes sera nommé selon votre modèle. Vous devriez le voir se mettre à jour dans quelques secondes.",
-    "createSongRequestChannel": "Un salon de demande de chansons ({0}) a été créé ! Vous pouvez commencer à demander n'importe quelle chanson par nom ou URL dans ce salon, sans besoin d'utiliser le préfixe du bot."
+    "createSongRequestChannel": "Un salon de demande de chansons ({0}) a été créé ! Vous pouvez commencer à demander n'importe quelle chanson par nom ou URL dans ce salon, sans besoin d'utiliser le préfixe du bot.",
+    "eqSave": "Saved EQ preset `{0}`.",
+    "eqApply": "Applied EQ preset `{0}`.",
+    "eqList": "Your EQ presets: {0}",
+    "eqNotFound": "Preset `{0}` not found.",
+    "eqNoPresets": "You have no saved EQ presets.",
+    "eqNoFilter": "There is no equalizer filter to save."
 }

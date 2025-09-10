@@ -173,5 +173,11 @@
     "invalidEndTime": "Thời gian kết thúc không hợp lệ, phải nằm giữa `00:00` và `{0}`",
     "invalidTimeOrder": "Thời gian kết thúc không thể nhỏ hơn hoặc bằng thời gian bắt đầu",
     "setStageAnnounceTemplate": "Hoàn thành! Từ bây giờ, trạng thái voice như cái bạn đang ở sẽ được đặt tên theo mẫu của bạn. Bạn sẽ thấy nó cập nhật trong vài giây.",
-    "createSongRequestChannel": "Một kênh yêu cầu bài hát ({0}) đã được tạo! Bạn có thể bắt đầu yêu cầu bất kỳ bài hát nào bằng tên hoặc URL trong kênh đó, mà không cần sử dụng tiền tố bot."
+    "createSongRequestChannel": "Một kênh yêu cầu bài hát ({0}) đã được tạo! Bạn có thể bắt đầu yêu cầu bất kỳ bài hát nào bằng tên hoặc URL trong kênh đó, mà không cần sử dụng tiền tố bot.",
+    "eqSave": "Saved EQ preset `{0}`.",
+    "eqApply": "Applied EQ preset `{0}`.",
+    "eqList": "Your EQ presets: {0}",
+    "eqNotFound": "Preset `{0}` not found.",
+    "eqNoPresets": "You have no saved EQ presets.",
+    "eqNoFilter": "There is no equalizer filter to save."
 }

@@ -173,5 +173,11 @@
     "invalidEndTime": "Niepoprawny czas końca, musi on mieścić się pomiędzy `00:00` a `{0}`",
     "invalidTimeOrder": "Czas zakończenia odtwarzania nie może być mniejszy lub równy czasowi startu",
     "setStageAnnounceTemplate": "Gotowe! Od tego momentu status kanału w którym znajduje się bot będzie wyglądał tak jak podany szablon. Aktualizacja powinna nastąpić za kilka sekund.",
-    "createSongRequestChannel": "Utworzono kanał do obsługi bota - ({0})! Możesz w nim dodawać utwory po nazwie lub adresie URL bez dodawnia prefixu"
+    "createSongRequestChannel": "Utworzono kanał do obsługi bota - ({0})! Możesz w nim dodawać utwory po nazwie lub adresie URL bez dodawnia prefixu",
+    "eqSave": "Saved EQ preset `{0}`.",
+    "eqApply": "Applied EQ preset `{0}`.",
+    "eqList": "Your EQ presets: {0}",
+    "eqNotFound": "Preset `{0}` not found.",
+    "eqNoPresets": "You have no saved EQ presets.",
+    "eqNoFilter": "There is no equalizer filter to save."
 }
